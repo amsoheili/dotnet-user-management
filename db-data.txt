@@ -1,0 +1,6 @@
+db: user-management
+db user: user_management_user
+db user password: 123456
+
+
+root user password: 1380
