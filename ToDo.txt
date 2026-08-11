@@ -1,0 +1,4 @@
+Features:
+    - user data handling
+    - user roles and roles inside their bussiness
+    - login, register and refresh token
