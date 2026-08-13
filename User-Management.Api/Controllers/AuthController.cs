@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 [Route("auth")]
 public class AuthController : ControllerBase
 {
-    // register 
+    // send otp sms
 
-    // login
+    // activate -> noticing the password
+
+    // login -> send the user id and password the recieve the access token, refresh token
 
     // refresh token
 }

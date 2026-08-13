@@ -1,4 +1,9 @@
 Features:
-    - user data handling
-    - user roles and roles inside their bussiness
+    - data handling
+    - roles and roles inside their bussiness
     - login, register and refresh token
+
+Feature Otp:
+    - users can login through recieving sms/bale message
+
+- action result and error handling base D
