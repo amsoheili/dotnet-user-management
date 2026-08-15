@@ -1,5 +1,11 @@
 ﻿{
   "$schema": "https://json.schemastore.org/launchsettings.json",
+  "Logging": {
+    "LogLevel": {
+      "Default": "Warning",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
   "profiles": {
     "http": {
       "commandName": "Project",

@@ -12,7 +12,7 @@ public static class ServiceResultExtension
         var error = result.Error!;
         var problem = new ProblemDetails
         {
-            Title = error.Code,
+            Title = error.Code.ToString(),
             Detail = error.Message
         };
 

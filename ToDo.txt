@@ -7,3 +7,5 @@ Feature Otp:
     - users can login through recieving sms/bale message
 
 - action result and error handling base D
+- change bale messenger in order to send message based on phone number
+- bring up swagger D
