@@ -12,31 +12,42 @@ public class AuthService(
     IUserOTPsRespository _userOTPsRespository,
     IUserRepository _userRepository,
     IMessenger _messenger,
-    ILogger<AuthService> _logger
+    ILogger<AuthService> _logger,
+    ISmsOutboxRepository _smsOutboxRepository,
+    IUnitOfWork _unitOfWork
 ) : IAuthService
 {
     public async Task<ServiceResult<string>> SendOtpSms(SendOtpDto data, CancellationToken ct)
     {
         var phoneNumber = data.phoneNumber;
-        _logger.LogWarning(phoneNumber);
 
         var userId = await _userRepository.GetUserIdByPhoneNumber(phoneNumber, ct);
-        _logger.LogWarning(userId);
 
         if (userId is null)
             return ServiceResult<string>.Failure(ServiceError.NotFound(AuthServiceErrorCodes.UserNotFound.Value(), "user not found"));
 
         var lastActiveOtp = await _userOTPsRespository.GetLastActiveOTP(userId, ct);
-        _logger.LogWarning(lastActiveOtp?.ToString());
 
         if (lastActiveOtp is not null)
             return ServiceResult<string>.Failure(ServiceError.NotFound(AuthServiceErrorCodes.UserOtpHasBeenSent.Value(), "user not found"));
 
         var createdOtp = RandomNumberGenerator.GetInt32(10000, 100000);
 
-        await _userOTPsRespository.AddOTP(userId, createdOtp.ToString(), DateTime.UtcNow.AddHours(3), ct);
+        await using var transaction = await _unitOfWork.BeginTransactionAsync(ct);
 
-        await _messenger.Send(phoneNumber, createdOtp.ToString());
+        try
+        {
+            await _userOTPsRespository.AddOTP(userId, createdOtp.ToString(), DateTime.UtcNow.AddHours(3), ct);
+
+            await _smsOutboxRepository.AddMessage(userId, phoneNumber, createdOtp.ToString(), ct);
+
+            await _unitOfWork.SaveChangesAsync(ct);
+            await transaction.CommitAsync(ct);
+        }
+        catch
+        {
+            await transaction.RollbackAsync(ct);
+        }
 
         return ServiceResult<string>.Success("Done");
     }

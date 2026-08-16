@@ -26,6 +26,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserOTPsRespository, UserOTPsRespository>();
+builder.Services.AddScoped<IUnitOfWork, AppDbContext>();
 
 var app = builder.Build();
 

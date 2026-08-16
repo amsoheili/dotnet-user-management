@@ -14,6 +14,7 @@ public static class InfrastructureDependencyInjection
         services.AddScoped<IMessenger, BaleMessenger>();
 
         services.AddScoped<IUserOTPsRespository, UserOTPsRespository>();
+        services.AddScoped<ISmsOutboxRepository, SmsOutboxRepository>();
 
         return services;
     }

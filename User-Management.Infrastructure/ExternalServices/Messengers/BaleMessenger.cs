@@ -45,6 +45,7 @@ public class BaleMessenger(
         else
         {
             Console.WriteLine($"Error: {response.StatusCode}");
+            return false;
         }
 
         return true;
