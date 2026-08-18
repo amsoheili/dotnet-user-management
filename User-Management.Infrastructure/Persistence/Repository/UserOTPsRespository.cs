@@ -9,12 +9,13 @@ public class UserOTPsRespository(
         return await _db.UserOTPs.AsNoTracking().FirstOrDefaultAsync(o => o.UserId == userId && o.ExpiresAt > DateTime.UtcNow, ct);
     }
 
-    public async Task<string> AddOTP(string userId, string otp, DateTime expiresAt, CancellationToken ct)
+    public async Task<string> AddOTP(string userId, string phoneNumber, string otp, DateTime expiresAt, CancellationToken ct)
     {
         var userOtp = new UserOTP
         {
             UserId = userId,
             OTP = otp,
+            PhoneNumber = phoneNumber,
             ExpiresAt = expiresAt
         };
 

@@ -11,7 +11,6 @@ public interface IAuthService
 public class AuthService(
     IUserOTPsRespository _userOTPsRespository,
     IUserRepository _userRepository,
-    IMessenger _messenger,
     ILogger<AuthService> _logger,
     ISmsOutboxRepository _smsOutboxRepository,
     IUnitOfWork _unitOfWork
@@ -37,7 +36,7 @@ public class AuthService(
 
         try
         {
-            await _userOTPsRespository.AddOTP(userId, createdOtp.ToString(), DateTime.UtcNow.AddHours(3), ct);
+            await _userOTPsRespository.AddOTP(userId, phoneNumber, createdOtp.ToString(), DateTime.UtcNow.AddHours(3), ct);
 
             await _smsOutboxRepository.AddMessage(userId, phoneNumber, createdOtp.ToString(), ct);
 

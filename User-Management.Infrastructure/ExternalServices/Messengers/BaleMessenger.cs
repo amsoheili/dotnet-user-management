@@ -22,7 +22,7 @@ public class BaleMessenger(
 
     private readonly string SEND_MESSAGE_ROUTE = "sendMessage";
 
-    public async Task<bool> Send(string phoneNumber, string message)
+    public async Task<bool> Send(string phoneNumber, string message, CancellationToken ct)
     {
         var baleMessage = new BaleSendMessage(
             CHAT_ID,

@@ -1,4 +1,4 @@
 public interface IMessenger
 {
-    public Task<bool> Send(string phoneNumber, string message);
+    public Task<bool> Send(string phoneNumber, string message, CancellationToken ct);
 }

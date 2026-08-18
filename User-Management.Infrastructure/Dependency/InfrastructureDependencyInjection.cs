@@ -15,6 +15,7 @@ public static class InfrastructureDependencyInjection
 
         services.AddScoped<IUserOTPsRespository, UserOTPsRespository>();
         services.AddScoped<ISmsOutboxRepository, SmsOutboxRepository>();
+        services.AddHostedService<SmsOutboxProcessor>();
 
         return services;
     }
