@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 public interface IAuthService
 {
     public Task<ServiceResult<string>> SendOtpSms(SendOtpDto data, CancellationToken ct);
-    // public Task<ServiceResult<string>> Login(LoginDto data, CancellationToken ct);
+    public Task<ServiceResult<LoginUserResponseDto>> Login(LoginDto data, CancellationToken ct);
 }
 
 public class AuthService(
@@ -13,7 +13,8 @@ public class AuthService(
     IUserRepository _userRepository,
     ILogger<AuthService> _logger,
     ISmsOutboxRepository _smsOutboxRepository,
-    IUnitOfWork _unitOfWork
+    IUnitOfWork _unitOfWork,
+    ITokenService _tokenService
 ) : IAuthService
 {
     public async Task<ServiceResult<string>> SendOtpSms(SendOtpDto data, CancellationToken ct)
@@ -23,12 +24,12 @@ public class AuthService(
         var userId = await _userRepository.GetUserIdByPhoneNumber(phoneNumber, ct);
 
         if (userId is null)
-            return ServiceResult<string>.Failure(ServiceError.NotFound(AuthServiceErrorCodes.UserNotFound.Value(), "user not found"));
+            return ServiceResult<string>.Failure(ServiceError.NotFound(AuthServiceErrorCodes.UserNotFound));
 
-        var lastActiveOtp = await _userOTPsRespository.GetLastActiveOTP(userId, ct);
+        var lastActiveOtp = await _userOTPsRespository.GetLastActiveOTPByUserId(userId, ct);
 
         if (lastActiveOtp is not null)
-            return ServiceResult<string>.Failure(ServiceError.NotFound(AuthServiceErrorCodes.UserOtpHasBeenSent.Value(), "user not found"));
+            return ServiceResult<string>.Failure(ServiceError.NotFound(AuthServiceErrorCodes.UserOtpHasBeenSent));
 
         var createdOtp = RandomNumberGenerator.GetInt32(10000, 100000);
 
@@ -51,12 +52,19 @@ public class AuthService(
         return ServiceResult<string>.Success("Done");
     }
 
-    // public Task<string> Login(LoginDto data)
-    // {
-    //     // user sends phone number
+    public async Task<ServiceResult<LoginUserResponseDto>> Login(LoginDto data, CancellationToken ct)
+    {
+        var lastActiveOtp = await _userOTPsRespository.GetLastActiveOTPByPhoneNumber(data.phoneNumber, ct);
 
-    //     // we send them a certain otp using bale messenger
+        if (lastActiveOtp is null)
+            return ServiceResult<LoginUserResponseDto>.Failure(ServiceError.Unauthorized(AuthServiceErrorCodes.UserOtpHasNotBeenSent));
 
-    //     // there is a certain time users can enter that otp
-    // }
+        if (lastActiveOtp.OTP != data.otp)
+            return ServiceResult<LoginUserResponseDto>.Failure(ServiceError.Unauthorized(AuthServiceErrorCodes.UserOtpDontMatch));
+
+        var accessToken = _tokenService.GenerateAccessToken();
+        var refreshToken = _tokenService.GenerateRefreshToken();
+        var expirationDate = _tokenService.GetAccessExpiryDate();
+        return ServiceResult<LoginUserResponseDto>.Success(new(accessToken, refreshToken, new DateTimeOffset(expirationDate).ToUnixTimeMilliseconds()));
+    }
 }

@@ -1,3 +1,4 @@
 public record LoginDto(
-    string phoneNumber
+    string phoneNumber,
+    string otp
 );

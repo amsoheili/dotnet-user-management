@@ -18,5 +18,9 @@ public sealed class ServiceResult<T>
 
     public static ServiceResult<T> Success(T value) => new(value);
 
-    public static ServiceResult<T> Failure(ServiceError error) => new(error);
+    public static ServiceResult<T> Failure(ServiceError error)
+    {
+        Console.WriteLine($"error code: {error.Code}");
+        return new(error);
+    }
 }

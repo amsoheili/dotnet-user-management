@@ -1,7 +1,9 @@
 public enum AuthServiceErrorCodes
 {
     UserNotFound = 1000,
-    UserOtpHasBeenSent = 1001
+    UserOtpHasBeenSent = 1001,
+    UserOtpHasNotBeenSent = 1002,
+    UserOtpDontMatch = 1003
 }
 
 public static class AuthServiceErrorCodesExtensions

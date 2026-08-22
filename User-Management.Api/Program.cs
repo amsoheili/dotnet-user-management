@@ -27,6 +27,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserOTPsRespository, UserOTPsRespository>();
 builder.Services.AddScoped<IUnitOfWork, AppDbContext>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 
 var app = builder.Build();
 

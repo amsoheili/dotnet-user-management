@@ -5,7 +5,7 @@ Features:
 
 Feature Otp:
     - users can login through recieving sms/bale message
-        - user otp D -> outbox implementation P
+        - user otp D -> outbox implementation D
         - 
 
 - action result and error handling base D

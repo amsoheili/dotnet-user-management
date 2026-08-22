@@ -13,7 +13,7 @@ public record BaleSendMessage(
 public class BaleMessenger(
     HttpClient _http,
     ILogger<BaleMessenger> _logger,
-    IOptions<MessengerSettings> _messengerSettings
+    IOptions<MessengerConfiguration> _messengerConfiguration
 ) : IMessenger
 {
     private readonly string BOT_BASE_URL = "https://tapi.bale.ai/bot";
@@ -53,7 +53,7 @@ public class BaleMessenger(
 
     private string GenerateSendMessageUrl()
     {
-        var token = _messengerSettings.Value.BotToken;
+        var token = _messengerConfiguration.Value.BotToken;
         _logger.LogWarning(token.ToString());
         return $"{BOT_BASE_URL}{token}/{SEND_MESSAGE_ROUTE}";
     }

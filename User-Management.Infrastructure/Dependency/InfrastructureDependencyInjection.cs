@@ -9,9 +9,10 @@ public static class InfrastructureDependencyInjection
     )
     {
 
-        services.Configure<MessengerSettings>(configuration.GetSection(MessengerSettings.SectionName));
-
+        services.Configure<MessengerConfiguration>(configuration.GetSection(MessengerConfiguration.SectionName));
+        // add jwt configurations
         services.AddScoped<IMessenger, BaleMessenger>();
+        services.AddScoped<IJwtConfiguration, JwtConfiguraion>();
 
         services.AddScoped<IUserOTPsRespository, UserOTPsRespository>();
         services.AddScoped<ISmsOutboxRepository, SmsOutboxRepository>();
