@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 [Route("auth")]
 public class AuthController(
     IAuthService _authService
-) : ControllerBase
+) : ApiControllerBase
 {
     // send otp sms
 
@@ -28,7 +28,6 @@ public class AuthController(
     public async Task<IActionResult> Login([FromHeader(Name = "User-Id")] string? userId, [FromBody] LoginDto loginDto, CancellationToken ct)
     {
         var result = await _authService.Login(loginDto, ct);
-
         return result.ToActionResult(this);
     }
 }

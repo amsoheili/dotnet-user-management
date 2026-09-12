@@ -29,7 +29,7 @@ public class AuthService(
         var lastActiveOtp = await _userOTPsRespository.GetLastActiveOTPByUserId(userId, ct);
 
         if (lastActiveOtp is not null)
-            return ServiceResult<string>.Failure(ServiceError.NotFound(AuthServiceErrorCodes.UserOtpHasBeenSent));
+            return ServiceResult<string>.Failure(ServiceError.Conflict(AuthServiceErrorCodes.UserOtpHasBeenSent));
 
         var createdOtp = RandomNumberGenerator.GetInt32(10000, 100000);
 
@@ -62,7 +62,9 @@ public class AuthService(
         if (lastActiveOtp.OTP != data.otp)
             return ServiceResult<LoginUserResponseDto>.Failure(ServiceError.Unauthorized(AuthServiceErrorCodes.UserOtpDontMatch));
 
-        var accessToken = _tokenService.GenerateAccessToken();
+        var userRoles = await _userRepository.GetUserRoles(lastActiveOtp.UserId, ct);
+
+        var accessToken = _tokenService.GenerateAccessToken(lastActiveOtp.UserId, lastActiveOtp.PhoneNumber, userRoles);
         var refreshToken = _tokenService.GenerateRefreshToken();
         var expirationDate = _tokenService.GetAccessExpiryDate();
         return ServiceResult<LoginUserResponseDto>.Success(new(accessToken, refreshToken, new DateTimeOffset(expirationDate).ToUnixTimeMilliseconds()));

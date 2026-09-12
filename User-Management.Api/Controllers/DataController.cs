@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("users")]
-public class UsersController : ControllerBase
+public class UsersController : ApiControllerBase
 {
     [HttpPost]
     public Task CreateUser()

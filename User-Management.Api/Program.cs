@@ -29,6 +29,13 @@ builder.Services.AddScoped<IUserOTPsRespository, UserOTPsRespository>();
 builder.Services.AddScoped<IUnitOfWork, AppDbContext>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 
+builder.Services.AddControllers(options =>
+{
+    options.Conventions.Insert(
+        0,
+        new GlobalRoutePrefixConvention("api/users"));
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
