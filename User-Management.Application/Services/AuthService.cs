@@ -1,4 +1,3 @@
-using System.IO.Pipelines;
 using System.Security.Cryptography;
 using Microsoft.Extensions.Logging;
 
@@ -55,7 +54,6 @@ public class AuthService(
     public async Task<ServiceResult<LoginUserResponseDto>> Login(LoginDto data, CancellationToken ct)
     {
         var lastActiveOtp = await _userOTPsRespository.GetLastActiveOTPByPhoneNumber(data.phoneNumber, ct);
-
         if (lastActiveOtp is null)
             return ServiceResult<LoginUserResponseDto>.Failure(ServiceError.Unauthorized(AuthServiceErrorCodes.UserOtpHasNotBeenSent));
 

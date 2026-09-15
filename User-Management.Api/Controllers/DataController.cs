@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("users")]
-public class UsersController : ApiControllerBase
+[Route("data")]
+public class UsersController(
+    IUserDataService _dataService
+) : ApiControllerBase
 {
     [HttpPost]
     public Task CreateUser()
@@ -16,14 +18,16 @@ public class UsersController : ApiControllerBase
         return Task.CompletedTask;
     }
 
-    [HttpGet]
-    public Task GetUserById() { return Task.CompletedTask; }
+    [HttpGet()]
+    public async Task<IActionResult> GetMe([FromHeader(Name = UserHeaders.UserId)] string? userId, CancellationToken ct)
+    {
+        var result = await _dataService.GetByUserId(userId, ct);
+        return result.ToActionResult(this);
+    }
 
     [HttpDelete]
     public Task DeleteUser(string userId)
     {
         return Task.CompletedTask;
     }
-
-
 }

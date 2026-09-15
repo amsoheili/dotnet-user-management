@@ -6,13 +6,6 @@ public class AuthController(
     IAuthService _authService
 ) : ApiControllerBase
 {
-    // send otp sms
-
-    // activate -> noticing the password
-
-    // login -> send the user id and password the recieve the access token, refresh token
-
-    // refresh token
 
     [HttpPost]
     [Route("send-otp")]

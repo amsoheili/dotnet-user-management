@@ -28,6 +28,8 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserOTPsRespository, UserOTPsRespository>();
 builder.Services.AddScoped<IUnitOfWork, AppDbContext>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUserDataService, UserDataService>();
+builder.Services.AddScoped<IUserClaimsService, UserClaimsService>();
 
 builder.Services.AddControllers(options =>
 {

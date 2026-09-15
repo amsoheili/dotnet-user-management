@@ -12,6 +12,12 @@ public class UserRepository(
         return user.Id;
     }
 
+    public async Task<string> GetPhoneNumberByUserId(string userId, CancellationToken ct)
+    {
+        var user = await _db.Users.AsNoTracking().SingleOrDefaultAsync(u => u.Id == userId, ct);
+        return user.PhoneNumber;
+    }
+
     public async Task<List<UserRolesEnum>> GetUserRoles(string userId, CancellationToken ct)
     {
         var user = await _db.Users.AsNoTracking().SingleOrDefaultAsync(u => u.Id == userId, ct);
