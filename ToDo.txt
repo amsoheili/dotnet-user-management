@@ -9,5 +9,6 @@ Feature Otp:
         - 
 
 - action result and error handling base D
-- change bale messenger in order to send message based on phone number
+- change bale messenger in order to send message based on phone number 
 - bring up swagger D
+- registering an unknown number added
